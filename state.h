@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
 #include "protocol.h"
@@ -48,7 +49,7 @@ static inline int add_user(manager_state_t *st, const char *name, const struct s
     if (find_user(st, name) >= 0) return -1;
     for (int i = 0; i < MAX_USERS; i++) if (!st->users[i].in_use) {
         st->users[i].in_use = 1;
-        strncpy(st->users[i].name, name, MAX_NAME_LEN-1);
+        snprintf(st->users[i].name, MAX_NAME_LEN, "%s", name);
         st->users[i].name[MAX_NAME_LEN-1] = '\0';
         st->users[i].addr = *addr;
         return i;
@@ -60,8 +61,7 @@ static inline int add_disk(manager_state_t *st, const char *name, uint32_t cap, 
     for (int i = 0; i < MAX_DISKS; i++) if (!st->disks[i].in_use) {
         st->disks[i].in_use = 1;
         st->disks[i].in_dss = 0;   /* free by default */
-        strncpy(st->disks[i].name, name, MAX_NAME_LEN-1);
-        st->disks[i].name[MAX_NAME_LEN-1] = '\0';
+        snprintf(st->disks[i].name, MAX_NAME_LEN, "%s", name);
         st->disks[i].capacity_blocks = cap;
         st->disks[i].addr = *addr;
         return i;
