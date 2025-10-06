@@ -1,3 +1,5 @@
+// protocol.h
+
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
@@ -94,4 +96,5 @@ void proto_cfg_req_hton(cfg_dss_req_t *p);
 void proto_cfg_req_ntoh(cfg_dss_req_t *p);
 
 #endif /* PROTOCOL_H */
+
 
