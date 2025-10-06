@@ -1,3 +1,5 @@
+// state.h
+
 #ifndef STATE_H
 #define STATE_H
 
@@ -10,6 +12,7 @@
 #define MAX_USERS 64
 #define MAX_DISKS 64
 
+/* Manager-side records for users and disks. */
 typedef struct {
     int                 in_use;
     char                name[MAX_NAME_LEN];
@@ -18,7 +21,7 @@ typedef struct {
 
 typedef struct {
     int                 in_use;
-    int                 in_dss;       /* NEW: 1 if allocated to current DSS */
+    int                 in_dss;      
     char                name[MAX_NAME_LEN];
     uint32_t            capacity_blocks;
     struct sockaddr_in  addr;         /* disk’s IP:port */
@@ -76,3 +79,4 @@ static inline int count_free_disks(manager_state_t *st) {
 }
 
 #endif /* STATE_H */
+
