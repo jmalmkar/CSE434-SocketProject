@@ -1,5 +1,4 @@
-// manager.c — UDP manager like the sample server style:
-// socket()->bind(); loop { recvfrom(); switch(opcode){...; sendto();} }
+// manager.c — UDP manager
 
 #include "common.h"
 #include "state.h"
@@ -135,3 +134,4 @@ int main(int argc, char **argv) {
     }
     return 0;
 }
+
