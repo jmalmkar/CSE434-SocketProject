@@ -1,3 +1,4 @@
+// common.h
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -40,4 +41,5 @@ static inline void maybe_warn_port_range(unsigned short port, const char *who) {
 }
 
 #endif /* COMMON_H */
+
 
