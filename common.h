@@ -13,12 +13,13 @@
 
 #include "protocol.h"
 
+/* Abort on fatal socket/IO errors. */
 static inline void DieWithError(const char *msg) {
     perror(msg);
     exit(1);
 }
 
-/* sample-style: small helpers (req_id used only for prints) */
+/* Compose a header with version/opcode/req_id (req_id in host order). */
 static inline void make_hdr(msg_hdr_t *h, uint8_t opcode, uint32_t req_id_host) {
     h->version  = PROTO_VERSION;
     h->opcode   = opcode;
@@ -26,7 +27,7 @@ static inline void make_hdr(msg_hdr_t *h, uint8_t opcode, uint32_t req_id_host) 
     h->req_id   = htonl(req_id_host);
 }
 
-/* Optional: warn if port not in group’s 100-port block */
+/* Warning: check chosen UDP port against DSS_GROUP’s block. */
 static inline void maybe_warn_port_range(unsigned short port, const char *who) {
     const char *gstr = getenv("DSS_GROUP");
     int G = gstr ? atoi(gstr) : 1;
@@ -39,3 +40,4 @@ static inline void maybe_warn_port_range(unsigned short port, const char *who) {
 }
 
 #endif /* COMMON_H */
+
