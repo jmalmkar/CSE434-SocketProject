@@ -1,4 +1,4 @@
-// disk.c — sample-style UDP client for register-disk / deregister-disk
+// disk.c — UDP client for register-disk & deregister-disk
 
 #include "common.h"
 #include "protocol.h"
@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     }
     const char *mgr_ip = argv[1];
     unsigned short mgr_port = (unsigned short)atoi(argv[2]);
-    maybe_warn_port_range(mgr_port, "disk");
+    maybe_warn_port_range(mgr_port, "disk"); /* if outside group range */
 
     int sock;
     struct sockaddr_in mgr, from;
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    /* receive ACK/ERR like sample */
+    /* Wait for ACK/ERR and print a single-line trace. */
     ssize_t got = recvfrom(sock, inb, sizeof(inb), 0, (struct sockaddr *)&from, &fromlen);
     if (got < (ssize_t)(sizeof(msg_hdr_t) + sizeof(resp_t))) DieWithError("disk: recvfrom failed");
 
@@ -81,3 +81,4 @@ int main(int argc, char **argv) {
     close(sock);
     return 0;
 }
+
