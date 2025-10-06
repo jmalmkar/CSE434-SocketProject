@@ -7,7 +7,7 @@
 #define MAX_NAME_LEN  32
 #define MAX_MSG_LEN   256
 
-/* Opcodes used in this milestone only */
+/* Opcodes */
 enum {
     OP_REGISTER_USER    = 1,
     OP_REGISTER_DISK    = 2,
@@ -94,3 +94,4 @@ void proto_cfg_req_hton(cfg_dss_req_t *p);
 void proto_cfg_req_ntoh(cfg_dss_req_t *p);
 
 #endif /* PROTOCOL_H */
+
