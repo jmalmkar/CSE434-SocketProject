@@ -1,4 +1,4 @@
-// user.c — sample-style UDP client using sendto/recvfrom explicitly
+// user.c
 
 #include "common.h"
 #include "protocol.h"
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    /* receive ACK/ERR (like sample: recvfrom then print) */
+    /* receive ACK/ERR */
     ssize_t got = recvfrom(sock, inb, sizeof(inb), 0, (struct sockaddr *)&from, &fromlen);
     if (got < (ssize_t)(sizeof(msg_hdr_t) + sizeof(resp_t))) DieWithError("user: recvfrom failed");
 
@@ -97,3 +97,4 @@ int main(int argc, char **argv) {
     close(sock);
     return 0;
 }
+
