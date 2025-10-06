@@ -1,4 +1,4 @@
-// protocol.c — protocol helper functions for header setup and byte-order conversion
+// protocol.c
 
 #include <string.h>
 #include <arpa/inet.h>
@@ -49,4 +49,5 @@ void proto_cfg_req_ntoh(cfg_dss_req_t *p)
     p->n          = ntohl(p->n);
     p->block_size = ntohl(p->block_size);
 }
+
 
