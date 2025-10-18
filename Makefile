@@ -7,7 +7,7 @@ TARGETS := manager user disk
 .PHONY: all clean
 all: $(TARGETS)
 
-manager: manager.c protocol.c
+manager: manager.c protocol.c storage.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 user: user.c protocol.c
@@ -18,3 +18,4 @@ disk: disk.c protocol.c
 
 clean:
 	rm -f $(TARGETS) *.o
+
