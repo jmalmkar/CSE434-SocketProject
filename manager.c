@@ -20,7 +20,6 @@ static void send_ack(int sock, const struct sockaddr_in *dst, uint32_t req_id,
         DieWithError("manager: sendto failed");
 }
 
-/* Tiny blob sender */
 static void send_blob(int sock, const struct sockaddr_in *dst, uint32_t req_id,
                       uint8_t opcode, const void *payload, size_t paylen)
 {
@@ -182,7 +181,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        /* ---------------- COPY ---------------- */
+        /* COPY */
 
         case OP_COPY_BEGIN: {
             if (paylen < sizeof(copy_begin_t)) { send_ack(sock,&src,req_id,ST_BAD_PARAMS,"short COPY_BEGIN"); break; }
@@ -218,28 +217,48 @@ int main(int argc, char **argv) {
             break;
         }
 
-        /* ---------------- READ ---------------- */
+        /* READ */
 
         case OP_READ_BEGIN: {
-            if (paylen < sizeof(read_begin_t)) { send_ack(sock,&src,req_id,ST_BAD_PARAMS,"short READ_BEGIN"); break; }
-            read_begin_t rb; memcpy(&rb, payload, sizeof(rb));
-            int dss_idx = find_dss(&st, rb.dss_name);
-            if (dss_idx<0) { send_ack(sock,&src,req_id,ST_BAD_PARAMS,"unknown DSS"); break; }
-            if (st.dsses[dss_idx].critical) { send_ack(sock,&src,req_id,ST_BUSY,"DSS busy"); break; }
-
-            file_rec_t *fr = find_file_in_dss(&st, rb.dss_name, rb.file_name);
-            if (!fr) { send_ack(sock,&src,req_id,ST_NOT_FOUND,"file not found"); break; }
-            if (strncmp(fr->owner, rb.user_name, MAX_NAME_LEN)!=0) {
-                send_ack(sock,&src,req_id,ST_NOT_OWNER,"owner mismatch"); break;
+            if (paylen < sizeof(read_begin_t)) {
+                send_ack(sock,&src,req_id,ST_BAD_PARAMS,"short READ_BEGIN");
+                break;
             }
-            read_plan_t rp; memset(&rp,0,sizeof(rp));
+            read_begin_t rb;
+            memcpy(&rb, payload, sizeof(rb));
+            int dss_idx = find_dss(&st, rb.dss_name);
+            if (dss_idx<0) {
+                send_ack(sock,&src,req_id,ST_BAD_PARAMS,"unknown DSS");
+                break;
+            }
+            if (st.dsses[dss_idx].critical) {
+                send_ack(sock,&src,req_id,ST_BUSY,"DSS busy");
+                break;
+            }
+        
+            file_rec_t *fr = find_file_in_dss(&st, rb.dss_name, rb.file_name);
+            if (!fr) {
+                send_ack(sock,&src,req_id,ST_NOT_FOUND,"file not found");
+                break;
+            }
+        
+            // Ownership Validation
+            if (strncmp(fr->owner, rb.user_name, MAX_NAME_LEN) != 0) {
+                send_ack(sock,&src,req_id,ST_NOT_OWNER,"not owner");
+                break;
+            }
+        
+            // If authorized, continue building read plan
+            read_plan_t rp;
+            memset(&rp,0,sizeof(rp));
             snprintf(rp.dss_name,16,"%s",rb.dss_name);
             snprintf(rp.file_name,MAX_FILENAME,"%s",rb.file_name);
             rp.file_size = fr->file_size;
             storage_build_plan(&st,dss_idx,&rp.plan);
             send_blob(sock,&src,req_id,OP_READ_PLAN,&rp,sizeof(rp));
-
+        
             if (!add_read_session(&st, rb.user_name, rb.dss_name, rb.file_name)) {
+                // error handling if needed
             }
             break;
         }
@@ -252,7 +271,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        /* ---------------- FAIL ---------------- */
+        /* FAIL */
 
         case OP_FAIL_BEGIN: {
             if (paylen < sizeof(fail_begin_t)) { send_ack(sock,&src,req_id,ST_BAD_PARAMS,"short FAIL_BEGIN"); break; }
@@ -278,7 +297,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        /* ---------------- DECOMMISSION ---------------- */
+        /* DECOMMISSION */
 
         case OP_DECOM_BEGIN: {
             if (paylen < sizeof(decom_begin_t)) { send_ack(sock,&src,req_id,ST_BAD_PARAMS,"short DECOM_BEGIN"); break; }
@@ -343,3 +362,4 @@ int main(int argc, char **argv) {
     }
     return 0;
 }
+
