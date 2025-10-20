@@ -38,16 +38,15 @@ void proto_disk_req_ntoh(reg_disk_req_t *p)
 }
 
 /* CONFIGURE_DSS helpers */
-void proto_cfg_req_hton(cfg_dss_req_t *p)
-{
-    p->n          = htonl(p->n);
-    p->block_size = htonl(p->block_size);
+void proto_cfg_req_hton(cfg_dss_req_t *p){
+    p->n            = htonl(p->n);
+    p->striping_unit= htonl(p->striping_unit); 
+}
+void proto_cfg_req_ntoh(cfg_dss_req_t *p){
+    p->n            = ntohl(p->n);
+    p->striping_unit= ntohl(p->striping_unit);  
 }
 
-void proto_cfg_req_ntoh(cfg_dss_req_t *p)
-{
-    p->n          = ntohl(p->n);
-    p->block_size = ntohl(p->block_size);
-}
+
 
 
