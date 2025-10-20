@@ -1,10 +1,6 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-/* [ADDED FINAL PROJECT FUNCTIONALITY]
-   Minimal manager-side, in-memory DSS with replication semantics.
-   No changes to disk.c are required for the final milestone demo. */
-
 #include <stdint.h>
 #include <netinet/in.h>
 #include "protocol.h"
