@@ -36,26 +36,16 @@ This final version extends Milestone 1 to support all commands required by the p
 
 ## Implemented Functionality
 Supported Commands
-- register-user	
-  - Register user: unique name, IPv4, manager port, client port.
--	register-disk
-  - Register disk: unique name, IPv4, capacity, command port.
-- configure-dss
-  - Configure named DSS with n ≥ 3 Free disks and power-of-two striping unit (128 B–1 MB).
--	ls
-  - List all configured DSS arrays and their files with sizes and owners.
--	copy	
-  - COPY_BEGIN → manager returns plan → COPY_COMPLETE records file.
--	read	
-  - ownership enforced; returns plan → READ_COMPLETE clears session.
--	disk-failure	
-  - manager enters critical section, returns plan → RECOVERY_COMPLETE.
--	decommission-dss	
-  - delete all files on DSS; mark disks Free; remove DSS.
--	deregister-user
-  - Remove a user and associated session state.
--	deregister-disk
-  - Remove a disk (fails if disk is currently in an active DSS).
+- **register-user**: unique name, IPv4, manager port, client port.
+-	**register-disk**: unique name, IPv4, capacity, command port.
+- **configure-dss**: configure named DSS with n ≥ 3 Free disks and power-of-two striping unit (128 B–1 MB).
+-	**ls**: list all configured DSS arrays and their files with sizes and owners.
+-	**copy**: COPY_BEGIN → manager returns plan → COPY_COMPLETE records file.
+-	**read**: ownership enforced; returns plan → READ_COMPLETE clears session.
+-	**disk-failure**: manager enters critical section, returns plan → RECOVERY_COMPLETE.
+-	**decommission-dss**: delete all files on DSS; mark disks Free; remove DSS.
+-	**deregister-user**: remove a user and associated session state.
+-	**deregister-disk**: remove a disk (fails if disk is currently in an active DSS).
 ---
 
 ## Build
