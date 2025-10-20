@@ -40,8 +40,8 @@ int main(int argc, char **argv) {
 
         reg_disk_req_t p; memset(&p, 0, sizeof(p));
         strncpy(p.disk_name, argv[4], MAX_NAME_LEN-1);
-        p.capacity_blocks = htonl((uint32_t)strtoul(argv[5], NULL, 10));
-        p.listen_port     = htons((unsigned short)atoi(argv[6]));
+        p.capacity_blocks = (uint32_t)strtoul(argv[5], NULL, 10);
+        p.listen_port     = (unsigned short)atoi(argv[6]);
 
         memcpy(out, &h, sizeof(h));
         memcpy(out + sizeof(h), &p, sizeof(p));
@@ -81,4 +81,3 @@ int main(int argc, char **argv) {
     close(sock);
     return 0;
 }
-
